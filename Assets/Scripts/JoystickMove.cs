@@ -1,21 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-public class JoystickMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
+public class JoystickMove : MonoBehaviour
 {
     [SerializeField]
-    private GameObject gObj_Player; // player to move with joystick, has Rigidbody2D
+    private GameObject gObj_Player;   // Rigidbody2D 객체를 달고있는 플레이어
     private Rigidbody2D rb2D_Player;
     private RectTransform rtf_JoyStick;
+
     private Vector3 vec3_init;
     private Vector3 vec3_velo;
 
-    private bool bIsJoystickHeld;
+    private JoystickUtil util;
 
-    [Range(0.1f, 1f)]
-    public float f_SpeedFactor;
+    [SerializeField, Range(0.1f, 1f)]
+    private float f_SpeedFactor;
 
     // Start is called before the first frame update
     void Start()
@@ -24,37 +22,34 @@ public class JoystickMove : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         rtf_JoyStick = GetComponent<RectTransform>();
         vec3_init = rtf_JoyStick.position;
 
-        bIsJoystickHeld = false;
+        util = new JoystickUtil();
     }
 
     // Update is called once per frame
     void Update()
     {
+        rtf_JoyStick.position = new Vector3(util.f_x, util.f_y, util.f_z);
         vec3_velo = rtf_JoyStick.position - vec3_init;
         rb2D_Player.position += new Vector2(vec3_velo.x, vec3_velo.y)*Time.deltaTime*f_SpeedFactor;
+
+        this.JoystickControl();
     }
 
-    public void OnPointerDown(PointerEventData eventData)
+    // 조이스틱 조정 부분
+    public void JoystickControl()
     {
-        bIsJoystickHeld = true;
-        Debug.Log("Joystick Held");
-        Debug.Log(eventData.position);
-
-        rtf_JoyStick.position = new Vector3(eventData.position.x, eventData.position.y, 0f);
-    }
-
-    public void OnDrag(PointerEventData eventData)
-    {
-        if(bIsJoystickHeld)
+        if(Input.GetMouseButton(0))
         {
-            rtf_JoyStick.position = new Vector3(eventData.position.x, eventData.position.y, 0f);
+            float x1 = vec3_init.x;
+            float y1 = vec3_init.y;
+            float x2 = Input.mousePosition.x;
+            float y2 = Input.mousePosition.y;
+            util.LimitPosition(new Vector2(x1, y1), new Vector2(x2, y2));
         }
-    }
 
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        Debug.Log("Joystick Released");
-        rtf_JoyStick.position = vec3_init;
-        bIsJoystickHeld = false;
+        else
+        {
+            util.ResetPosition();
+        }
     }
 }
