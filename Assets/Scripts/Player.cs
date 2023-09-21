@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -24,9 +22,9 @@ public class Player : MonoBehaviour
     // test move function
     void FixedUpdate()
     {
-        float f_horSpeed = Input.GetAxis("Horizontal") * 5;
-        float f_verSpeed = Input.GetAxis("Vertical") * 5;
+        float horSpeed = Input.GetAxis("Horizontal") * 5;
+        float verSpeed = Input.GetAxis("Vertical") * 5;
 
-        rb2D_player.velocity = new Vector2(f_horSpeed, f_verSpeed);
+        rb2D_player.velocity = new Vector2(horSpeed, verSpeed);
     }
 }

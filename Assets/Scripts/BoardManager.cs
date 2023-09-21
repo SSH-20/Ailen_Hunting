@@ -69,6 +69,10 @@ public class BoardManager : MonoBehaviour
 
     Vector3 RandomPos()
     {
+        if (gridPositions.Count == 0)
+        {
+            InitializeList(); // Regenerate grid positions if it's empty
+        }
         int randomIdx = Random.Range(0, gridPositions.Count);
         Vector3 randomPosition = gridPositions[randomIdx];
         gridPositions.RemoveAt(randomIdx);

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerPosDebug : MonoBehaviour
@@ -17,8 +15,8 @@ public class PlayerPosDebug : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 vec3_temp = gObj_Player.transform.position;
-        string str_temp = $"X: {vec3_temp.x:0}, Y: {vec3_temp.y:0}";
-        txt_pos.SetText(str_temp);
+        Vector3 pos = gObj_Player.transform.position;
+        string tmp = $"X: {pos.x:0}, Y: {pos.y:0}";
+        txt_pos.SetText(tmp);
     }
 }
